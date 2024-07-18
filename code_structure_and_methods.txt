@@ -1,0 +1,31 @@
+Main.py
+    - Login Authentication
+    - Route user to appropriate menu
+
+Views.py
+    - Functions that represent user menus
+
+Util.py
+    - Includes all methods pertaining to specific features
+    - Any other various functions required
+
+DAO
+    -  All needed CRUD operations/queries
+
+MODEL    
+    Cart.py
+        - Class to model user's shopping cart
+        - Includes list of items with item_id, item_name, price
+        - Includes transaction total
+
+    Account.py
+        - Class to model user accounts
+
+    Item.py
+        - Class to model an item in the inventory
+
+    Transactions
+        - Class to model an item in the inventory
+
+
+

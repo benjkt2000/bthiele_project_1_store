@@ -1,0 +1,162 @@
+OVERVIEW
+
+Login Menu:
+    Login
+    Create Account
+    Exit Application
+
+User Menu:
+    Browse Items
+        Display Items
+        Add Item To Cart
+        Return To Main Menu
+
+    View Cart 
+        Show Current Cart
+        Update Item 
+        Remove All Items
+        Checkout
+        Return To Main Menu
+    
+    View Transaction History
+    
+    Modify Account Information
+        Show Current Information
+        Update Firstname 
+        Update Lastname
+        Update Password
+        Return To Previous Menu
+
+    Logout
+
+Admin Menu:
+    Modify User
+        View Current Cart
+        Modify Account Information
+            Show Current Information
+            Update Firstname 
+            Update Lastname
+            Update Password
+            Grant/Revoke Admin Status
+            Return To Previous Menu
+
+
+    Modify Inventory
+        Display Items
+        Add New Item To Inventory
+        Remove Item From Inventory (Stretch goal. May be hard to update all saved shopping carts)
+    
+    
+    Modify Account Information
+
+
+FEATURE WORKFLOWS:
+
+USER MENU
+- Upon login, retrieve current cart from database
+
+Browse Items
+    - Bring user to browse items sub-menu
+    Display Items
+        - Show table containing id, quantity, price of each item. (Find some sort of tabulation module)
+    Add Item To Cart
+        - Ask for item_id
+        - Ask for quantity
+        - Ask to confirm
+        - Add to cart (WHAT SHOULD A CART OBJECT LOOK LIKE? CREATE CLASS HOLDING USER ID AND DICTONARY OF ITEMS(item_id: quanity?))
+        - Print Current Cart
+        - Return to browse items menu
+    Return To Main Menu
+        - Exit to main menu
+
+View Cart
+    - Bring user to View Cart sub-menu
+    Show Current Cart
+        - Print current user cart to screen as table
+    Update Item
+        - Ask user for item_id
+        - Check if item exists in cart
+            - If item exists, ask for quantity
+                - Make sure quanity does not exceed database current_inventory. If so, please ask again. 
+                - Update cart to database
+                - Print cart to screen
+            - If item does not exist, print "Item does not exist" and return to View Cart menu
+    Remove All Items
+        - Ask user to confirm, otherwise Exit
+        - Delete current cart and update in database
+    Checkout
+        - Display current cart
+        - Ask user to confirm checkout
+        - Update database inventory
+        - clear cart
+        - return to View Cart Menu
+    Return To Main Menu
+        - Exit to main menu
+
+View Transaction History
+- Print customer transaction history in tabular format by date range?
+
+Modify Account Information
+    Show Current Information
+        - Display all information in tabular format
+    
+    Update Firstname 
+        - Ask user to please enter a new username
+        - Make sure new username does not exist
+            - if so, update account and save to database
+            - if not, print "username already exists"
+    
+    Update Lastname
+        (Same as firstname)
+    
+    Update password
+        - Ask user to enter current password, new password, and re-enter new password
+        - If current password is incorrect, print "Unable to change password. Current password was incorrect."
+        - If new password and copy do not match, print "new passwords do not match."
+        - Otherwise, update password and save to database
+    
+    Return To Previous Menu
+     - Exit to main menu
+
+Logout
+    - Save current user's cart data to database
+        
+
+
+ADMIN MENU:
+
+Modify User
+    - Query a user by username (wrap in object) 
+    - If user exists, print user info 
+    - If not, notify admin and return to admin menu
+    
+    View Current Cart
+        - Print cart to screen in tabular format
+    
+    Modify Account Information
+        - Same as basic user but can grant/revoke admin status (See USER MENU)
+        Grant/Revoke Admin Status
+            - Ask admin if user should be admin. Y for yes and N for no.
+            - Print 'Status Confirmed'
+
+    Modify Inventory
+        - Bring to Modify Inventory Sub-Menu
+
+        Display Items
+            - Show table containing id, quantity, price of each item. 
+        
+        Add New Item To Inventory
+            - Ask admin for item_id and check if it exists
+            - If does not exist, ask for item information
+                - name (make sure name is unique)
+                - quantity/inventory (Cannot be negative)
+                - price (make sure price is positive)
+                - Notify item was successfully added to inventory
+            - If item exists, notify and return to Modify inventory Screen
+
+        Remove Item From Inventory
+            - Ask admin for item_id and check if it exists
+            - If exists, confirm Delete
+                - Update all user shopping carts and delete from items collection        
+            - If item does not exist, notify customer and return to previous menu.
+        
