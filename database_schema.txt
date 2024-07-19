@@ -1,10 +1,10 @@
 COLLECTIONS/SCHEMA:
 accounts {
-    user_id: "",
+    user_id: int,
+    username: "",
     password: "",
     first_name: "",
     last_name: "",
-    transactions: [],
     current_transaction: [item_id: quantity],
     admin: False
 }
@@ -14,13 +14,14 @@ items {
     item_id: 0,
     item_name: "",
     price: 0.00
-    current_inventory: 0,
+    current_inventory: 0
 }
 
 
 
 transactions {
     transaction_id: 0,
+    user_id: "",
     date: xx-xx-xxxx,
     items: [
         item_id: 0
