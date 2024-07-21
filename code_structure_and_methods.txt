@@ -17,30 +17,47 @@ Util.py
                 - loop though each customer and their cart, update item quantity to zero
             update_item_quantity()
                 - Make sure item amount is not negative
-        
+            get_list_of_items()
+                - Sort by date
+                - wrap each item in object
+
+        retrieve_all_transactions()
+            - query database for transactions
+            - print in tabular format and sorted by date
+            - calculate total profits
 DAO
     -  All needed CRUD operations/queries
 
     Need queries that:
         Cart:
         - Get all items from database
-        - Update a users cart via user_id
+        - Add item to user's cart via user_id
+        - Delete user cart via user_id
+        - Update item in users cart via item_id and user_id
+        - Remove item in users cart via item-id and user_id
+        - 
         - Add transaction to database
         Account:
-
+        - Retrieve all transactions via user_id
+         - Retrieve an account from database
+        - Update username in database by user_id
+        - Update first name in database by user_id
+        - Update password in database by user_id
+        - Update admin status in database by user_id 
         Item:
-        - Update an item by item_id
+        - Update item in database by item_id
         
         Misc:
         - Add item to database
         - Remove item from database by item_id
         - Retrieve all accounts from database
-
-        - Retrieve all transactions via user_id
+        - Query a user by username
+        - retrieve_all_items
+        - retrieve_all_transactions
         
 
-
-
+ 
+        
 MODEL    
     Cart.py
         - Class to model user's shopping cart
@@ -57,7 +74,7 @@ MODEL
                 - Will calculate transaction total using dict of {item(object) : quantity} 
 
             - show_cart()
-                - Displays cart in tablular format
+                - Displays cart in tablular format (item, price, quantity)
                 - Prints Total
 
             - show_catalog()
@@ -114,11 +131,66 @@ MODEL
         - Class to model user accounts
         - Include:
             - user_id
+            - username
             - password
             - first_name
             - last_name
+            - admin_status: True/False
             - list of transactions(Query transactions table via user_id) 
-            - Shopping Cart Object
+            - Shopping Cart Object 
+
+        Methods:
+        def __init__(account: json/dict) NOTE: Unknown if will take in a json/Object
+            - assign all basic account fields
+            - query for a list of transactions
+            - instantiate a cart object
+
+        get_account_transactions(user_id: int)
+            - query transactions via user_id
+            - (perhaps transform JSON into list or whatever will be used to print in tabular format)
+            - return list of transactions
+
+        show_account_info()
+            - print all user info in tabular format
+
+        update_username(new_username: str)
+            - query database to make sure username does not exist 
+                - if so, return False
+            
+            - assign username to object
+            - update username in database
+            - return True
+
+        update_first_name(new_first_name: str)
+            - assign new first name to object
+            - update first name in database
+            - return True
+
+        update_last_name(new_last_name: str)
+            - assign new last name to object
+            - update last name in database
+            - return True
+
+        update_password(new_password: str)
+            - assign new password to object
+            - update password to database
+            - return True
+
+        update_admin_status(status: bool)
+            - set the admin status to bool
+            - return True
+
+
+        view_all_transactions()
+            - Print all transactions 
+            NOTE: need to find good way to format all data. probably print in blocks
+
+        get_cart()
+            - return a copy of users cart 
+
+        set_cart()?? NOTE: May not need to because of pass by reference
+
+
 
     Item.py
         - Class to model an item in the inventory
@@ -131,7 +203,7 @@ MODEL
         Methods:
         def __init__(id: int, name: str, quanity: int, price: float)
         print_item_details()
-            - print item details in tabular format
+            - print item details 
         get_id()
         get_name()
         get_price()
@@ -140,13 +212,7 @@ MODEL
         update_item()
             - will update item in database
 
-    Transactions
-        - Class to model an item in the inventory
-        - Include:
-            - transaction_id
-            - date
-            - list of items (As object/class)
-            - total_cost
+
 
 
 

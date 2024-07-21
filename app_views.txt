@@ -48,6 +48,8 @@ Admin Menu:
         Remove Item From Inventory (Stretch goal. May be hard to update all saved shopping carts)
         Update Item Quantity 
     
+    View all transactions
+    
     Modify Account Information
         Show Current Information
         Update Username
@@ -81,10 +83,10 @@ Exit Application
     - Close application
 
 USER MENU
-- Upon login, retrieve current cart from database
+- Upon login, retrieve account from database
 
 Browse Items
-    - Bring user to browse items sub-menu (use Cart class)
+    - Bring user to browse items sub-menu (get copy of user's Cart class, get list of all items)
     Display Items
         - Show table containing id, name, quantity, price of each item. (Find some sort of tabulation module)
     Add Item To Cart
@@ -98,7 +100,7 @@ Browse Items
         - Exit to User menu
 
 View Cart
-    - Bring user to View Cart sub-menu
+    - Bring user to View Cart sub-menu (pass in copy of user's cart object)
    
     Show Current Cart
         - Print current user cart to screen as table
@@ -164,12 +166,12 @@ Logout
 ADMIN MENU:
 
 Modify User
-    - Query a user by username (wrap in object) 
+    - Query a user by username (wrap in account object) 
     - If user exists, print user info 
     - If not, notify admin and return to admin menu
     
-    View Current Cart
-        - Print cart to screen in tabular format
+    View Current Cart (get copy of user's cart)
+        - Print cart to screen in tabular format 
     
     Modify Account Information
         - Same as basic user but can grant/revoke admin status (See USER MENU)
@@ -178,7 +180,8 @@ Modify User
             - Print 'Status Confirmed'
 
 Modify Inventory
-    - Bring to Modify Inventory Sub-Menu 
+    - Bring admin to Modify Inventory Sub-Menu
+    - Retrieve all items and save to list 
 
     Display Items
         - Show table containing id, quantity, price of each item. 
@@ -186,10 +189,13 @@ Modify Inventory
     Add New Item To Inventory
         - Ask admin for item_id and check if it exists
         - If does not exist, ask for item information
-            - name (make sure name is unique)
+            - item_id   
+                - Make sure item_id is unique
+            - name 
             - quantity/inventory (Cannot be negative)
             - price (make sure price is positive)
             - Add item to database
+            - update list of items
             - Notify item was successfully added to inventory
         - If item exists, notify and exit to menu
 
@@ -204,6 +210,10 @@ Modify Inventory
         - If exists, ask for new number of items (Cannot be negative)
             - Notify item was successfully updated in inventory
         - If does not exist, notify and return to previous screen
+
+Retrieve All Transactions
+    - Print all transactions in tabular format
+    - Print total earnings
 
 Modify Account Information
     (Same as USER)
