@@ -25,35 +25,80 @@ Util.py
             - query database for transactions
             - print in tabular format and sorted by date
             - calculate total profits
+
+        add_account() 
+        find_largest_user_id() (Make sure every user_id is unique)
+        delete_account_by_id() 
+
+        Validation:
+        retrieve_user_account()
+        validate_credentials(username: str, password: str)
+
 DAO
     -  All needed CRUD operations/queries
 
     Need queries that:
         Cart:
         - Get all items from database
+            - db.items.find()
         - Add item to user's cart via user_id
         - Delete user cart via user_id
         - Update item in users cart via item_id and user_id
         - Remove item in users cart via item-id and user_id
-        - 
         - Add transaction to database
+        
         Account:
         - Retrieve all transactions via user_id
-         - Retrieve an account from database
+            db.transactions.find({user_id: "value"})
+        
         - Update username in database by user_id
+            db.accounts.updateOne({user_id: "value"}, {username: "value"})
+
         - Update first name in database by user_id
+            -db.accounts.updateOne({user_id: "value"}, {first_name: "value"})
+        
         - Update password in database by user_id
-        - Update admin status in database by user_id 
+            -db.accounts.updateOne({user_id: "value"}, {password: "value"})
+
+        - Update admin status in database by user_id  
+            -db.accounts.updateOne({user_id: "value"}, {admin: "true/false"})
+
+
         Item:
-        - Update item in database by item_id
+        - Update item quanity in database by item_id
+            - db.items.updateOne({item_id: value},{current_inventory: value})
         
         Misc:
-        - Add item to database
-        - Remove item from database by item_id
-        - Retrieve all accounts from database
-        - Query a user by username
-        - retrieve_all_items
-        - retrieve_all_transactions
+        - Create database
+            - use groceryStore
+            - db.createCollection('accounts')
+            - db.createCollection('items)
+            - db.createCollection('transactions) 
+        
+        - Inventory Related Operations
+            - Add item/items to database
+                - db.items.insertMany([])
+                - db.items.insertOne({})
+            - Delete item from database
+                - db.items.deleteOne({item_id: value})
+            - Retrieve all items from database
+                - db.items.find()
+            
+          - Transaction Based Operations
+            - db.transactions.find() 
+
+        
+        - Universal Account Operations
+            - db.accounts.insertOne({})
+            - db.accounts.insertMany([])
+            - db.accounts.aggregate([{$group:{_id: null, maxField: {$max: "$user_id"}}}])
+            - db.accounts.deleteOne({id: 4})
+            - db.accounts.findOne({username: "username"})
+            - db.accounts.find()
+
+
+        
+            
         
 
  

@@ -40,6 +40,7 @@ Admin Menu:
             Update Lastname
             Update Password
             Grant/Revoke Admin Status
+            Delete Account
             Return To Previous Menu
 
     Modify Inventory
@@ -178,6 +179,9 @@ Modify User
         Grant/Revoke Admin Status
             - Ask admin if user should be admin. Y for yes and N for no.
             - Print 'Status Confirmed'
+        Delete Account
+            - Ask if admin if he/she is sure to delete account
+            - delete account and update inventory by clearing cart
 
 Modify Inventory
     - Bring admin to Modify Inventory Sub-Menu
