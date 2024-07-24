@@ -42,9 +42,15 @@ DAO
         - Get all items from database
             - db.items.find()
         - Add item to user's cart via user_id
+            - db.accounts.updateOne({user_id: value}, {$push: {current_transaction: {item_id: value , quantity: value}}})
         - Delete user cart via user_id
+            - db.accounts.updateOne({user_id: value}, {$unset: {current_transaction: ""}})
         - Update item in users cart via item_id and user_id
+            - db.accounts.updateOne({user_id: value, "current_transaction.item_id": value}, {$set: {"current_transaction.$.quantity": value}})
         - Remove item in users cart via item-id and user_id
+            - db.accounts.updateOne({user_id: value, "current_transaction.item_id": value}, {$unset: {"current_transaction.$": ""}})
+        - Clean up nulls in shopping cart post remove operation
+            - db.accounts.updateOne({user_id: value, }, {$pull: {current_transaction: null}})
         - Add transaction to database
         
         Account:

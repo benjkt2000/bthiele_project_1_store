@@ -5,7 +5,7 @@ accounts {
     password: "",
     first_name: "",
     last_name: "",
-    current_transaction: [item_id: quantity],
+    current_transaction: [{item_id: 0, quantity: 0}],
     admin: False
 }
 
@@ -24,8 +24,11 @@ transactions {
     user_id: "",
     date: xx-xx-xxxx,
     items: [
+        {
         item_id: 0
         quantity: 0
+        price: 0.00
+        }
     ],
     total_cost: 0.00
 }
