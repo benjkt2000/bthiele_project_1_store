@@ -9,16 +9,15 @@ Views.py
 Util.py
     - Any other various functions required such as 
         inventory management:
-            display_items()
-            add_item()
+            *display_items()
+            *add_item()
             remove_item()
                 - Requries all customers carts to be scanned and inventory updated
                 - retrieve all customers
                 - loop though each customer and their cart, update item quantity to zero
             update_item_quantity()
                 - Make sure item amount is not negative
-            get_list_of_items()
-                - Sort by date
+            *get_list_of_items()
                 - wrap each item in object
 
         retrieve_all_transactions()
@@ -29,6 +28,8 @@ Util.py
         add_account() 
         find_largest_user_id() (Make sure every user_id is unique)
         delete_account_by_id() 
+        retrieve_all_users()
+        display_all_users()
 
         Validation:
         retrieve_user_account()
@@ -59,8 +60,11 @@ DAO
         
         Account:
 
-        - Retrieve all transactions via user_id
+        *- Retrieve all transactions via user_id
             db.transactions.find({user_id: "value"})
+
+        *- Retrieve a users cart
+            db.accounts.findOne({user_id: value},{current_transaction: 1})
         
         *- Update username in database by user_id
             db.accounts.updateOne({user_id: "value"}, {$set: {username: "value"}})
@@ -91,33 +95,27 @@ DAO
             - db.createCollection('transactions) 
         
         - Inventory Related Operations
-            - Add item/items to database
-                - db.items.insertMany([])
+            - *Add itemto database
                 - db.items.insertOne({})
-            - Delete item from database
+            - *Delete item from database
                 - db.items.deleteOne({item_id: value})
-            - Retrieve all items from database
+            - *Retrieve all items from database
                 - db.items.find()
             
           - Transaction Based Operations
-            - db.transactions.find() 
+            *- db.transactions.find() 
+            *- db.transactions.aggregate([{$group:{_id: null, maxField: {$max: "$transaction_id"}}}])
 
         
         - Universal Account Operations
-            - db.accounts.insertOne({})
-            - db.accounts.insertMany([])
-            - db.accounts.aggregate([{$group:{_id: null, maxField: {$max: "$user_id"}}}])
-            - db.accounts.deleteOne({id: 4})
-            - db.accounts.findOne({username: "username"})
-            - db.accounts.find()
+            *- db.accounts.insertOne({})
+            *- db.accounts.insertMany([])
+            *- db.accounts.aggregate([{$group:{_id: null, maxField: {$max: "$user_id"}}}])
+            *- db.accounts.deleteOne({id: 4})
+            *- db.accounts.findOne({user_id: value})
+            *- db.accounts.find()
 
-
-        
-            
-        
-
- 
-        
+       
 MODEL    
     Cart.py
         - Class to model user's shopping cart
@@ -172,7 +170,7 @@ MODEL
                 - Update Cart and Item inventory both in objects and database
                     - return True
 
-            - checkout_items()
+            *- checkout_items()
                 - Create transaction object (id, user_id, date, items, total_cost)
                 - Clear Cart
 
@@ -189,57 +187,47 @@ MODEL
             - Shopping Cart Object 
 
         Methods:
-        def __init__(account: json/dict) NOTE: Unknown if will take in a json/Object
+        *def __init__(account: json/dict) NOTE: Unknown if will take in a json/Object
             - assign all basic account fields
             - query for a list of transactions
             - instantiate a cart object
 
-        get_account_transactions(user_id: int)
+        *get_account_transactions(user_id: int)
             - query transactions via user_id
             - (perhaps transform JSON into list or whatever will be used to print in tabular format)
             - return list of transactions
 
-        show_account_info()
-            - print all user info in tabular format
+        *show_account_info()
+            - print all user info 
 
-        update_username(new_username: str)
-            - query database to make sure username does not exist 
-                - if so, return False
+        *change_username(new_username: str)
             
             - assign username to object
             - update username in database
             - return True
 
-        update_first_name(new_first_name: str)
+        *change_first_name(new_first_name: str)
             - assign new first name to object
             - update first name in database
             - return True
 
-        update_last_name(new_last_name: str)
+        *change_last_name(new_last_name: str)
             - assign new last name to object
             - update last name in database
             - return True
 
-        update_password(new_password: str)
+        *change_password(new_password: str)
             - assign new password to object
             - update password to database
             - return True
 
-        update_admin_status(status: bool)
+        *change_admin_status(status: bool)
             - set the admin status to bool
             - return True
 
 
-        view_all_transactions()
+        *view_all_transactions()
             - Print all transactions 
-            NOTE: need to find good way to format all data. probably print in blocks
-
-        get_cart()
-            - return a copy of users cart 
-
-        set_cart()?? NOTE: May not need to because of pass by reference
-
-
 
     Item.py
         - Class to model an item in the inventory
@@ -250,16 +238,15 @@ MODEL
             - current_inventory
 
         Methods:
-        def __init__(id: int, name: str, quanity: int, price: float)
-        print_item_details()
+        *def __init__(id: int, name: str, quanity: int, price: float)
+        *print_item_details()
             - print item details 
-        get_id()
-        get_item_name()
-        get_price()
-        get_current_inventory()
-        set_current_inventory()
-        update_item()
-            - will update item inventory in database
+        *get_id()
+        *get_item_name()
+        *get_price()
+        *get_current_inventory()
+        *update_item()
+            - will update item inventory in database and object
 
 
 

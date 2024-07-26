@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from mock_info import *
 
-# retrieve list of items
+# Item Table Related Functions
 def retrieve_all_items(): 
     client = MongoClient()
 
@@ -22,6 +22,117 @@ def retrieve_all_items():
     
     except Exception as e:
         print("A database exception occurred:", e)
+
+def add_item_to_inventory(item_id: int, item_name: str, price: float, current_inventory: int):
+    client = MongoClient()
+
+    try:
+        db = client.get_database("groceryStore")
+        
+        my_query = {"item_id": item_id, "item_name": item_name, "price": price, "current_inventory": current_inventory}
+
+        db.items.insert_one(my_query)
+
+    except Exception as e:
+        print("A database exception occurred:", e)
+
+def delete_item_from_inventory(item_id: int):
+    client = MongoClient()
+
+    try:
+        db = client.get_database("groceryStore")
+        
+        my_query = {"item_id": item_id}
+
+        db.items.delete_one(my_query)
+
+    except Exception as e:
+        print("A database exception occurred:", e)
+
+# Account Table Related Functions
+def find_max_account_id():
+    client = MongoClient()
+
+    try:
+        db = client.get_database("groceryStore")
+        
+        my_query = [{"$group":{"_id": None, "maxField": {"$max": "$user_id"}}}]
+    
+        result = db.accounts.aggregate(my_query)
+
+        max_user_id = 0
+
+        for i in result:
+            max_user_id = i
+
+        return max_user_id['maxField']
+            
+    
+    except Exception as e:
+        print("A database exception occurred:", e)
+
+def get_all_user_accounts_from_database():
+    client = MongoClient()
+
+    try:
+        db = client.get_database("groceryStore")
+
+        users = db.accounts.find()
+
+        list_of_users = []
+
+        for user in users:
+            list_of_users.append(user)
+        
+        return list_of_users
+
+    except Exception as e:
+        print("A database exception occurred:", e)
+
+def get_user_account_from_database(user_id: int):
+    client = MongoClient()
+
+    try:
+        db = client.get_database("groceryStore")
+        
+        my_query = {"user_id": user_id}
+
+        user = db.accounts.find_one(my_query)
+
+        return user
+
+    except Exception as e:
+        print("A database exception occurred:", e)
+
+def add_account_to_database(user_id: int, username: str, password: str, first_name: str, last_name: str, admin_status: bool):
+    client = MongoClient()
+
+    try:
+        db = client.get_database("groceryStore")
+        
+        my_query = {"user_id": user_id, "username": username, "password": password, "first_name": first_name, "last_name": last_name, "current_transaction": [], "admin": False}
+
+        db.accounts.insert_one(my_query)
+
+    except Exception as e:
+        print("A database exception occurred:", e)
+
+
+def delete_account_from_database(user_id: int):
+    client = MongoClient()
+
+    try:
+        db = client.get_database("groceryStore")
+        
+        my_query = {"user_id": user_id}
+
+        db.accounts.delete_one(my_query)
+
+    except Exception as e:
+        print("A database exception occurred:", e)
+
+
+
 
 def add_item_to_current_transaction(user_id: int, item_id: int, quantity: int):
     client = MongoClient()
@@ -94,6 +205,7 @@ def remove_nulls_from_user_cart(user_id: int):
     except Exception as e:
         print("A database exception occurred:", e)
 
+# MIGHT ME TOO SLOW
 def add_transaction(transaction: dict):
     client = MongoClient()
 
@@ -216,10 +328,104 @@ def create_database():
         print("A database exception occurred:", e)
 
 
+# User Transaction Related Functions
+def find_max_transaction_id():
+    client = MongoClient()
+
+    try:
+        db = client.get_database("groceryStore")
+        
+        my_query = [{"$group":{"_id": None, "maxField": {"$max": "$transaction_id"}}}]
+    
+        result = db.transactions.aggregate(my_query)
+
+        max_trans_id = 0
+
+        for i in result:
+            max_trans_id = i
+
+        return max_trans_id['maxField']
+            
+    
+    except Exception as e:
+        print("A database exception occurred:", e)
+
+
+def get_transactions_by_user_id(user_id: int):
+    client = MongoClient()
+
+    try:
+        db = client.get_database("groceryStore")
+        
+        my_query = {"user_id": user_id}
+    
+        raw_user_transactions = db.transactions.find(my_query)
+
+        user_transactions = []
+
+        for trans in raw_user_transactions:
+            user_transactions.append(trans)
+       
+        return user_transactions
+
+    except Exception as e:
+        print("A database exception occurred:", e)
+
+def get_all_transactions():
+    client = MongoClient()
+
+    try:
+        db = client.get_database("groceryStore")
+    
+        raw_user_transactions = db.transactions.find()
+
+        user_transactions = []
+
+        for trans in raw_user_transactions:
+            user_transactions.append(trans)
+       
+        return user_transactions
+
+    except Exception as e:
+        print("A database exception occurred:", e)
+    
+
+# def get_user_shopping_cart(user_id: id):
+#     client = MongoClient()
+
+#     try:
+#         db = client.get_database("groceryStore")
+        
+#         my_query = {"user_id": user_id}
+#         projection = {"current_transaction": 1}
+    
+#         raw_cart = db.accounts.find_one(my_query, projection)
+       
+#         print(raw_cart)
+#         if len(raw_cart) > 0:
+#             raw_cart['current_transaction']
+            
+    
+
+#     except Exception as e:
+#         print("A database exception occurred:", e)
+
+
 ########################################################################################
 
+#add_item_to_inventory(5,'Stew', 5.00, 25)
+
+#delete_item_from_inventory(5)
 
 
 
+#add_account_to_database(5, 'sSmith', 'pass', 'Sarah', 'Smith', False)
+# delete_account_from_database(5)
 
+#print(get_user_account_from_database(5))
 
+#print(get_all_user_accounts_from_database())
+
+#print(find_max_account_id())
+
+print(get_all_transactions())

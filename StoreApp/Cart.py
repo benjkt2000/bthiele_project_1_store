@@ -31,7 +31,7 @@ class Cart():
 
             t.add_row([item['item_id'], name, price, quantity])
 
-        print(t)
+        print(t,"\n")
 
     def show_item_catalog(self):
         t = PrettyTable(['Item ID', 'Item Name', 'Price', 'In Stock'])
@@ -39,7 +39,7 @@ class Cart():
         for item in self.item_catalog.values():
             t.add_row([item.get_id(),item.get_item_name(), item.get_price(), item.get_current_inventory()])  
 
-        print(t)                
+        print(t,'\n')                
 
 
     def calculate_total(self):
@@ -119,6 +119,7 @@ class Cart():
     
     def checkout_items(self):
         transaction = {}
+        transaction['transaction_id'] = find_max_transaction_id() + 1
         transaction['user_id'] = self.user_id
         dt = datetime.now()
         transaction['date'] = datetime.isoformat(dt)
@@ -133,28 +134,5 @@ class Cart():
 
 
 
-
-
-
-
-
-user_id = 4            
-    
-user_cart = [{ 'item_id': 4, 'quantity': 80}]
-
-
-new_cart = Cart(user_id, user_cart)
-
-new_cart.show_item_catalog()
-new_cart.show_cart()
-
-print(new_cart.checkout_items())
-# print(new_cart.add_item_to_cart(4,6))
-
-# new_cart.show_item_catalog()
-# new_cart.show_cart()
-
-# delete_item_in_cart_by_user_id(4,0)
-# remove_nulls_from_user_cart(4)
 
 
