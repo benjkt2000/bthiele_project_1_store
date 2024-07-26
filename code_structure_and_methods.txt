@@ -34,51 +34,60 @@ Util.py
         retrieve_user_account()
         validate_credentials(username: str, password: str)
 
+
+        Building/Populating database:
+            
+
 DAO
     -  All needed CRUD operations/queries
 
     Need queries that:
         Cart:
-        - Get all items from database
+        *- Get all items from database
             - db.items.find()
-        - Add item to user's cart via user_id
+        *- Add item to user's cart via user_id
             - db.accounts.updateOne({user_id: value}, {$push: {current_transaction: {item_id: value , quantity: value}}})
-        - Delete user cart via user_id
+        *- Delete user cart via user_id
             - db.accounts.updateOne({user_id: value}, {$unset: {current_transaction: ""}})
-        - Update item in users cart via item_id and user_id
+        *- Update item in users cart via item_id and user_id
             - db.accounts.updateOne({user_id: value, "current_transaction.item_id": value}, {$set: {"current_transaction.$.quantity": value}})
-        - Remove item in users cart via item-id and user_id
+        *- Remove item in users cart via item-id and user_id
             - db.accounts.updateOne({user_id: value, "current_transaction.item_id": value}, {$unset: {"current_transaction.$": ""}})
-        - Clean up nulls in shopping cart post remove operation
+        *- Clean up nulls in shopping cart post remove operation
             - db.accounts.updateOne({user_id: value, }, {$pull: {current_transaction: null}})
-        - Add transaction to database
+        *- Add transaction to database
         
         Account:
+
         - Retrieve all transactions via user_id
             db.transactions.find({user_id: "value"})
         
-        - Update username in database by user_id
-            db.accounts.updateOne({user_id: "value"}, {username: "value"})
+        *- Update username in database by user_id
+            db.accounts.updateOne({user_id: "value"}, {$set: {username: "value"}})
 
-        - Update first name in database by user_id
-            -db.accounts.updateOne({user_id: "value"}, {first_name: "value"})
+        *- Update first name in database by user_id
+            -db.accounts.updateOne({user_id: "value"}, {$set: {first_name: "value"}})
+
+        *- Update last name in database by user_id
+            -db.accounts.updateOne({user_id: "value"}, {$set: {last_name: "value"}})
         
-        - Update password in database by user_id
-            -db.accounts.updateOne({user_id: "value"}, {password: "value"})
+        *- Update password in database by user_id
+            -db.accounts.updateOne({user_id: "value"}, {$set: {password: "value"}})
 
-        - Update admin status in database by user_id  
+        *- Update admin status in database by user_id  
             -db.accounts.updateOne({user_id: "value"}, {admin: "true/false"})
 
 
         Item:
-        - Update item quanity in database by item_id
+        *- Update item quanity in database by item_id
             - db.items.updateOne({item_id: value},{current_inventory: value})
+
         
         Misc:
         - Create database
-            - use groceryStore
-            - db.createCollection('accounts')
-            - db.createCollection('items)
+            *- use groceryStore
+            *- db.createCollection('accounts')
+            *- db.createCollection('items)
             - db.createCollection('transactions) 
         
         - Inventory Related Operations
@@ -113,28 +122,28 @@ MODEL
     Cart.py
         - Class to model user's shopping cart
         - Include user ID
-        - Includes dict of {item(object) : quantity} to represent cart
-        - Includes dict of {item(object) : quantity} to represent catalog
+        - Includes list of {item_id :, quantity: } to represent cart
+        - Includes dict of {item_id = item(object)} to represent catalog
         - Includes transaction total
 
         Methods:
-            - def __init__(user_id: int, items: dict)
-                - takes in user_id, dict of {item_id: quantity}
-                - Will query for all items in database, wrap them in item objects and assign to dictionary
-                - Will search catalog for all items in cart, copy item object, and assign quantity. Save in dictionary.
-                - Will calculate transaction total using dict of {item(object) : quantity} 
+            *- def __init__(user_id: int, items: list)
+                - takes in user_id, list of {item_id: quantity}
+                - Will query for all items in database, wrap them in item objects and assign to dict
+                - Will query for the users current cart and save list as instance variable
+                - Will calculate transaction total using list of {item_id: quantity:} 
 
-            - show_cart()
+            * - show_cart()
                 - Displays cart in tablular format (item, price, quantity)
                 - Prints Total
 
-            - show_catalog()
+            *- show_item_catalog()
                 - Displays catalog in tabular format
 
-            - calculate_total(items: dict)
+            *- calculate_total(items: dict)
                 - Takes in a dictionary of items and calculates total cost
 
-            - add_item_to_cart(item_id: int, quantity: int)
+            *- add_item_to_cart(item_id: int, quantity: int)
                 - lookup item in catalog
                     - if does not exist return False
                 - Check if quantity exceeds inventory
@@ -145,13 +154,13 @@ MODEL
                     - Update Cart in database
                     - return True if successfully added
 
-            - clear_cart()
+            *- clear_cart()
                 - Update item objects in catalog and update counts in database
                 - Erase contents of cart
                 - update_cart_in_database (send empty cart)
                 - Return True
 
-            - update_item_quantity(item_id: int)
+            *- update_item_quantity(item_id: int, quantity: int)
                 - Check if item exists in cart
                     - if not, return False
                 - if item quanity is zero
@@ -162,17 +171,6 @@ MODEL
                     - if so, return False
                 - Update Cart and Item inventory both in objects and database
                     - return True
-
-            - check_if_item_exists_in_cart(item_id: int)
-                - search dict of items and confirm if it exists
-
-            - check_if_item_exists_in_catalog(item_id: int)
-                - Check if exists in catalog
-                    if so, return True
-                    if not, return False
-
-            - update_cart_in_database
-                - Will update cart in database
 
             - checkout_items()
                 - Create transaction object (id, user_id, date, items, total_cost)
@@ -256,12 +254,12 @@ MODEL
         print_item_details()
             - print item details 
         get_id()
-        get_name()
+        get_item_name()
         get_price()
         get_current_inventory()
         set_current_inventory()
         update_item()
-            - will update item in database
+            - will update item inventory in database
 
 
 
