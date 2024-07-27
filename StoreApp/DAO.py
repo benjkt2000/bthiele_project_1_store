@@ -49,6 +49,20 @@ def delete_item_from_inventory(item_id: int):
     except Exception as e:
         print("A database exception occurred:", e)
 
+def update_item_in_inventory(item_id: int, quantity: int):
+    client = MongoClient()
+
+    try:
+        db = client.get_database("groceryStore")
+        
+        my_query = {"item_id": item_id}
+        new_values = {"$set": {"current_inventory": quantity}}
+    
+        db.items.update_one(my_query, new_values)
+
+    except Exception as e:
+        print("A database exception occurred:", e)
+
 # Account Table Related Functions
 def find_max_account_id():
     client = MongoClient()
@@ -132,8 +146,6 @@ def delete_account_from_database(user_id: int):
         print("A database exception occurred:", e)
 
 
-
-
 def add_item_to_current_transaction(user_id: int, item_id: int, quantity: int):
     client = MongoClient()
 
@@ -159,6 +171,7 @@ def delete_user_cart_by_user_id(user_id: int):
         new_values = {"$unset": {"current_transaction": ""}}
     
         db.accounts.update_one(my_query, new_values)
+        db.accounts.update_one({'user_id': user_id},{'$set': {'current_transaction': []}})
 
     except Exception as e:
         print("A database exception occurred:", e)
@@ -205,18 +218,6 @@ def remove_nulls_from_user_cart(user_id: int):
     except Exception as e:
         print("A database exception occurred:", e)
 
-# MIGHT ME TOO SLOW
-def add_transaction(transaction: dict):
-    client = MongoClient()
-
-    try:
-        db = client.get_database("groceryStore")
-    
-        db.transactions.insert_one(transaction)
-
-    except Exception as e:
-        print("A database exception occurred:", e)
-    
 def update_username(user_id: int, new_username: str):
     client = MongoClient()
 
@@ -288,46 +289,6 @@ def update_admin_status(user_id: int, new_admin_status: bool):
     except Exception as e:
         print("A database exception occurred:", e)
 
-def update_item_quantity(item_id: int, quantity: int):
-    client = MongoClient()
-
-    try:
-        db = client.get_database("groceryStore")
-        
-        my_query = {"item_id": item_id}
-        new_values = {"$set": {"current_inventory": quantity}}
-    
-        db.items.update_one(my_query, new_values)
-
-    except Exception as e:
-        print("A database exception occurred:", e)
-
-
-
-# Database Creation
-def create_database():
-    client = MongoClient()
-
-    try:
-        dblist = client.list_database_names()
-        
-        if "groceryStore" in dblist:
-            return False
-        
-        db = client["groceryStore"]
-
-        new_accounts = mock_accounts 
-        new_items = mock_items
-
-        db.accounts.insert_many(new_accounts)
-        db.items.insert_many(new_items)
-
-        return True
-
-    except Exception as e:
-        print("A database exception occurred:", e)
-
-
 # User Transaction Related Functions
 def find_max_transaction_id():
     client = MongoClient()
@@ -388,44 +349,37 @@ def get_all_transactions():
 
     except Exception as e:
         print("A database exception occurred:", e)
+
+def add_transaction(transaction: dict):
+    client = MongoClient()
+
+    try:
+        db = client.get_database("groceryStore")
     
+        db.transactions.insert_one(transaction)
 
-# def get_user_shopping_cart(user_id: id):
-#     client = MongoClient()
+    except Exception as e:
+        print("A database exception occurred:", e)
 
-#     try:
-#         db = client.get_database("groceryStore")
+# Database Creation
+def create_database():
+    client = MongoClient()
+
+    try:
+        dblist = client.list_database_names()
         
-#         my_query = {"user_id": user_id}
-#         projection = {"current_transaction": 1}
-    
-#         raw_cart = db.accounts.find_one(my_query, projection)
-       
-#         print(raw_cart)
-#         if len(raw_cart) > 0:
-#             raw_cart['current_transaction']
-            
-    
+        if "groceryStore" in dblist:
+            return False
+        
+        db = client["groceryStore"]
 
-#     except Exception as e:
-#         print("A database exception occurred:", e)
+        new_accounts = mock_accounts 
+        new_items = mock_items
 
+        db.accounts.insert_many(new_accounts)
+        db.items.insert_many(new_items)
 
-########################################################################################
+        return True
 
-#add_item_to_inventory(5,'Stew', 5.00, 25)
-
-#delete_item_from_inventory(5)
-
-
-
-#add_account_to_database(5, 'sSmith', 'pass', 'Sarah', 'Smith', False)
-# delete_account_from_database(5)
-
-#print(get_user_account_from_database(5))
-
-#print(get_all_user_accounts_from_database())
-
-#print(find_max_account_id())
-
-print(get_all_transactions())
+    except Exception as e:
+        print("A database exception occurred:", e)

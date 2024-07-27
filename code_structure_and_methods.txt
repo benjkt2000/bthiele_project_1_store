@@ -11,33 +11,30 @@ Util.py
         inventory management:
             *display_items()
             *add_item()
-            remove_item()
+            *remove_item()
                 - Requries all customers carts to be scanned and inventory updated
                 - retrieve all customers
                 - loop though each customer and their cart, update item quantity to zero
-            update_item_quantity()
-                - Make sure item amount is not negative
+            *update_item_quantity()
+                - Make sure item amount is not negative and is greater than current_inventory
             *get_list_of_items()
                 - wrap each item in object
 
-        retrieve_all_transactions()
+        *retrieve_all_transactions()
             - query database for transactions
             - print in tabular format and sorted by date
             - calculate total profits
 
-        add_account() 
-        find_largest_user_id() (Make sure every user_id is unique)
-        delete_account_by_id() 
-        retrieve_all_users()
-        display_all_users()
+            ??? Make new find max transaction id outside of DAO? Update checkout method
+
+        *add_account() 
+        *check_if_user_exists() (Make sure every user_id is unique)
+        *delete_account_by_id() 
+        *retrieve_all_users()
+        *display_all_users()
 
         Validation:
-        retrieve_user_account()
-        validate_credentials(username: str, password: str)
-
-
-        Building/Populating database:
-            
+        *validate_credentials(username: str, password: str)
 
 DAO
     -  All needed CRUD operations/queries

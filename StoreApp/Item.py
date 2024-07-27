@@ -28,5 +28,5 @@ class Item():
 
     def update_item(self, new_inventory: int):
          self.current_inventory = new_inventory
-         update_item_quantity(self.item_id, new_inventory)
+         update_item_in_inventory(self.item_id, new_inventory)
 

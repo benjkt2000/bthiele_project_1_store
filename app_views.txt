@@ -166,8 +166,9 @@ Logout
 
 ADMIN MENU:
 
+
 Modify User
-    - Query a user by username (wrap in account object) 
+    - query for list of users
     - If user exists, print user info 
     - If not, notify admin and return to admin menu
     
