@@ -42,7 +42,7 @@ class Account():
         self.password = new_password
 
     def change_admin_status(self, new_status: bool):
-        update_password(self.user_id, new_status)
+        update_admin_status(self.user_id, new_status)
         self.admin_status = new_status
 
     def view_all_transactions(self):

@@ -117,9 +117,16 @@ class Cart():
                 
         return False
     
+    def check_if_item_is_in_cart(self, item_id: int):
+        for item in self.user_cart:
+            if item_id == item['item_id']:
+                return True
+        else:
+            return False
+    
     def checkout_items(self):
         transaction = {}
-        transaction['transaction_id'] = find_max_transaction_id() + 1
+        transaction['transaction_id'] = 1
         transaction['user_id'] = self.user_id
         dt = datetime.now()
         transaction['date'] = datetime.isoformat(dt)
@@ -131,7 +138,6 @@ class Cart():
         self.clear_cart()
 
         return True
-
 
 
 

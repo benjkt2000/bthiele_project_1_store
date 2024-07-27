@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from mock_info import *
+from Mock_info import *
 
 # Item Table Related Functions
 def retrieve_all_items(): 
@@ -103,13 +103,13 @@ def get_all_user_accounts_from_database():
     except Exception as e:
         print("A database exception occurred:", e)
 
-def get_user_account_from_database(user_id: int):
+def get_user_account_from_database(username: str):
     client = MongoClient()
 
     try:
         db = client.get_database("groceryStore")
         
-        my_query = {"user_id": user_id}
+        my_query = {"username": username}
 
         user = db.accounts.find_one(my_query)
 
@@ -375,9 +375,11 @@ def create_database():
 
         new_accounts = mock_accounts 
         new_items = mock_items
+        new_transaction = mock_transaction
 
         db.accounts.insert_many(new_accounts)
         db.items.insert_many(new_items)
+        db.transactions.insert_one(new_transaction)
 
         return True
 

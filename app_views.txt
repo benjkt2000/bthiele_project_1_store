@@ -13,7 +13,7 @@ User Menu:
 
     View Cart 
         Show Current Cart
-        Update/Remove Item 
+        Update/Remove Item   (ACCOUNT FOR EMPTY CART)
         Remove All Items
         Checkout
         Return To User Menu
@@ -22,7 +22,7 @@ User Menu:
     
     Modify Account Information
         Show Current Information
-        Update Username
+        Update Username 
         Update Firstname 
         Update Lastname
         Update Password
@@ -40,7 +40,6 @@ Admin Menu:
             Update Lastname
             Update Password
             Grant/Revoke Admin Status
-            Delete Account
             Return To Previous Menu
 
     Modify Inventory

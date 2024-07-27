@@ -78,3 +78,16 @@ mock_items = [
         "current_inventory": 10
     }
 ]
+
+mock_transaction = {
+  "transaction_id": 1,
+  "user_id": 2,
+  "date": "2024-07-27T03:00:07.920929",
+  "items": [
+    {
+      "item_id": 1,
+      "quantity": 15
+    }
+  ],
+  "total_cost": 19.05
+}

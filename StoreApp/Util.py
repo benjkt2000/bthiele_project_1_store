@@ -30,7 +30,7 @@ def display_items(list_of_items: dict):
 
 def add_item(item_id: int, item_name: str, price: float, current_inventory: int, list_of_items: dict):  
     add_item_to_inventory(item_id, item_name, price, current_inventory)
-    list_of_items[item_id] = Item(item_id, item_name, price)
+    list_of_items[item_id] = Item(item_id, item_name, price, current_inventory)
 
     return True
 
@@ -149,12 +149,17 @@ def validate_credentials(username: str, password: str, list_of_users: dict):
     
     return False
 
+def retrieve_user_from_database(username: str):
+    raw_account = get_user_account_from_database(username)
+
+    account = Account(raw_account['user_id'], raw_account['username'], raw_account['password'], raw_account['first_name'], raw_account['last_name'], raw_account['admin'], raw_account['current_transaction'])
+
+    return account
+
 def add_account(username: str, password: str, first_name: str, last_name: str):
     max_user_id = find_largest_user_id(retrieve_all_users())
     add_account_to_database(max_user_id + 1, username, password, first_name, last_name, False)
     return True
-
-
 
         
 
