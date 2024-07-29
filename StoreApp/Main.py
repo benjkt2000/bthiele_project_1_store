@@ -1,10 +1,20 @@
 from DAO import *
 from Views import *
+import logging
 
 
 def main():
+    # Initate Logging
+    logging.basicConfig(filename="./StoreApp/groceryStore.log",format='%(asctime)s %(message)s',filemode='w')
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+
     # Create database if one does not exist
-    create_database()
+    created_database = create_database()
+
+    if created_database == True:
+        logging.info('Created Database groceryStore.')
+    
 
     # Start Menus
     run_app = True

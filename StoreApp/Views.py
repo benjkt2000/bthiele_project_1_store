@@ -1,6 +1,7 @@
 # Login Menu
 from Util import *
 import re
+import logging
 
 def execute_login_menu():
     command = -1
@@ -28,7 +29,8 @@ def login():
         if valid_credentials == False:
             print('Invalid username or password. Please try again.\n')
         else: 
-            print('Login Success!\n')           
+            print('Login Success!\n')
+            logging.info(f'User \'{username}\' logged in. ')
             return retrieve_user_from_database(username)
         
 def execute_create_user_menu():
@@ -38,7 +40,7 @@ def execute_create_user_menu():
         new_username = input('Please Enter a new username: ')
          
         if check_if_user_exists_by_username(new_username.strip(), retrieve_all_users()):
-            print("Username already taken. Please try again.")
+            print("Username already taken. Please try again.\n")
         else:
             print("Valid Username")
             valid_username = True
@@ -47,7 +49,8 @@ def execute_create_user_menu():
     new_last_name = input('Please Enter a new last name: ')
 
     add_account(new_username, new_password, new_first_name, new_last_name)
-    print('Account Successfuly Created.')
+    print('Account Successfuly Created.\n')
+    logging.info(f'New User \'{new_username}\' created. ')
     return retrieve_user_from_database(new_username)
 
 
@@ -74,6 +77,7 @@ def execute_user_menu(account: Account):
         elif command == '3':
             current_account.list_of_transactions =  current_account.get_account_transactions(current_account.user_id)
             current_account.view_all_transactions()
+            logging.info(f'User \'{current_account.username}\' displayed all his/her transactions.')
         elif command == '4':
             execute_modify_account_info_menu(current_account)
         elif command == '5':
@@ -95,6 +99,7 @@ def execute_browse_items_menu(account: Account):
 
         if command == '1':
             display_items(get_list_of_items())
+            logging.info(f'User \'{current_account.username}\' displayed all items. ')
         
         elif command == '2':
             item_id = 0
@@ -124,6 +129,7 @@ def execute_browse_items_menu(account: Account):
 
             if(success):
                 print('Item successfuly added to cart.\n')
+                logging.info(f'User \'{current_account.username}\' added an item. ')
                 current_account.shopping_cart.show_cart()
             else:
                 print('Failed to add item to cart\n')
@@ -149,7 +155,8 @@ def execute_view_cart_menu(account: Account):
         print("")
 
         if command == '1':
-            current_account.shopping_cart.show_cart() 
+            current_account.shopping_cart.show_cart()
+            logging.info(f'User \'{current_account.username}\' displayed all items in cart. ') 
        
         elif command == '2':
             if not current_account.shopping_cart.user_cart:
@@ -181,6 +188,7 @@ def execute_view_cart_menu(account: Account):
 
                 if(success):
                     print('Successfuly updated item in cart.\n')
+                    logging.info(f'User \'{current_account.username}\' updated an item in his/her cart. ')
                     current_account.shopping_cart.show_cart()
                 else:
                     print('Failed to update item in cart\n')
@@ -188,12 +196,14 @@ def execute_view_cart_menu(account: Account):
         elif command == '3':
             current_account.shopping_cart.clear_cart()
             print('All items have been removed from cart!\n')
+            logging.info(f'User \'{current_account.username}\' cleared his/her cart. ')
         elif command == '4':
             if not current_account.shopping_cart.user_cart:
                 print('Cart is empty.\n')
             else:    
                 current_account.shopping_cart.checkout_items()
                 print('Items have been purchased!\n')
+                logging.info(f'User \'{current_account.username}\' performed cart checkout. ')
         elif command == '5':
             return None     
         else:
@@ -216,6 +226,7 @@ def execute_modify_account_info_menu(account: Account):
 
         if command == '1':
             current_account.show_account_info()
+            logging.info(f'User \'{current_account.username}\' displayed his/her account information. ')
         
         elif command == '2':
             valid_username = False
@@ -231,6 +242,7 @@ def execute_modify_account_info_menu(account: Account):
                     valid_username = True
 
             print('Username Updated.\n')
+            logging.info(f'User \'{current_account.username}\' updated his/her username. ')
             current_account.show_account_info()
 
         
@@ -238,18 +250,21 @@ def execute_modify_account_info_menu(account: Account):
             new_password = input('Please Enter a new password: ')
             current_account.change_password(new_password)
             print('Password Changed.\n')
+            logging.info(f'User \'{current_account.username}\' updated his/her password. ')
             current_account.show_account_info()
 
         elif command == '4':
             new_first_name = input('Please Enter a new first name: ')
             current_account.change_first_name(new_first_name)
             print('First Name Changed.\n')
+            logging.info(f'User \'{current_account.username}\' updated his/her first name. ')
             current_account.show_account_info()
         
         elif command == '5':
             new_last_name = input('Please Enter a new last name: ')
             current_account.change_last_name(new_last_name)
             print('Last Name Changed.\n')
+            logging.info(f'User \'{current_account.username}\' updated his/her last name. ')
             current_account.show_account_info()
 
         elif command == '6':
@@ -262,7 +277,7 @@ def execute_modify_account_info_menu(account: Account):
 
 # Admin Menu
 def execute_admin_menu(account: Account):
-    current_account = account
+    admin_account = account
     command = -1
     while command != 5:
         print('ADMIN MENU')
@@ -276,20 +291,22 @@ def execute_admin_menu(account: Account):
         print("")
 
         if command == '1':
-            execute_admin_modify_account_info_menu()
+            execute_admin_modify_account_info_menu(admin_account)
         elif command == '2':
-            execute_modify_items_menu()
+            execute_modify_items_menu(admin_account)
         elif command == '3':
             display_all_transactions(get_list_of_items())
+            logging.info(f'User \'{admin_account.username}\' displayed all transactions.')
         elif command == '4':
-            execute_modify_account_info_menu(current_account)
+            execute_modify_account_info_menu(admin_account)
         elif command == '5':
             return None
         else:
             print('Invalid Command.\n')
 
 
-def execute_admin_modify_account_info_menu():
+def execute_admin_modify_account_info_menu(account):
+    admin_account = account
     list_of_users = retrieve_all_users()
     display_all_users(list_of_users)
 
@@ -325,6 +342,7 @@ def execute_admin_modify_account_info_menu():
 
         if command == '1':
             current_account.show_account_info()
+            logging.info(f'User \'{admin_account.username}\' retrieved \'{current_account.username}\'s information.')
         
         elif command == '2':
             valid_username = False
@@ -340,6 +358,7 @@ def execute_admin_modify_account_info_menu():
                     valid_username = True
 
             print('Username Updated.\n')
+            logging.info(f'User \'{admin_account.username}\' changed \'{current_account.username}\'s username.')
             current_account.show_account_info()
 
         
@@ -347,18 +366,21 @@ def execute_admin_modify_account_info_menu():
             new_password = input('Please Enter a new password: ')
             current_account.change_password(new_password)
             print('Password Changed.\n')
+            logging.info(f'User \'{admin_account.username}\' changed \'{current_account.username}\'s password.')
             current_account.show_account_info()
 
         elif command == '4':
             new_first_name = input('Please Enter a new first name: ')
             current_account.change_first_name(new_first_name)
             print('First Name Changed.\n')
+            logging.info(f'User \'{admin_account.username}\' changed \'{current_account.username}\'s first name.')
             current_account.show_account_info()
         
         elif command == '5':
             new_last_name = input('Please Enter a new last name: ')
             current_account.change_last_name(new_last_name)
             print('Last Name Changed.\n')
+            logging.info(f'User \'{admin_account.username}\' changed \'{current_account.username}\'s last name.')
             current_account.show_account_info()
 
         elif command == '6':
@@ -370,6 +392,7 @@ def execute_admin_modify_account_info_menu():
                 else:
                     current_account.change_admin_status(False)
                 print('Admin status changed.\n')
+                logging.info(f'User \'{admin_account.username}\' changed \'{current_account.username}\'s admin status.')
             else: 
                 print('Invalid Input\n')
 
@@ -380,8 +403,10 @@ def execute_admin_modify_account_info_menu():
             print('Invalid Command.\n')
             current_account.show_account_info()
 
-def execute_modify_items_menu():
+def execute_modify_items_menu(account):
+    admin_account = account
     list_of_items = get_list_of_items()
+    logging.info(f'User \'{admin_account.username}\' retrived all items.')
     
     command = -1
     while command != 5:
@@ -397,6 +422,7 @@ def execute_modify_items_menu():
 
         if command == '1':
             display_items(list_of_items)
+            logging.info(f'User \'{admin_account.username}\' retrived all items.')
         
         elif command == '2':
             item_id = 0
@@ -434,6 +460,7 @@ def execute_modify_items_menu():
 
             if(success):
                 print('Item successfuly added to database.\n')
+                logging.info(f'User \'{admin_account.username}\' added \'{name}\' to the database.')
             else:
                 print('Failed to add item to database.\n')
 
@@ -452,6 +479,7 @@ def execute_modify_items_menu():
 
             remove_item(int(item_id), list_of_items)
             print('Item has been removed from inventory.\n')
+            logging.info(f'User \'{admin_account.username}\' removed item_id: \'{item_id}\' from the database.')
 
         elif command == '4':
             item_id = 0
@@ -479,6 +507,7 @@ def execute_modify_items_menu():
 
             if success == True:
                 print('Item updated successfuly.\n')
+                logging.info(f'User \'{admin_account.username}\' updated item_id: \'{item_id}\' in the database.')
             else:
                 print('Item could not be updated. Quantity must be greater than current inventory.\n')
 
