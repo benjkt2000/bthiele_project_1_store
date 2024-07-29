@@ -31,7 +31,8 @@ class Cart():
 
             t.add_row([item['item_id'], name, price, quantity])
 
-        print(t,"\n")
+        print(t)
+        print('Total: ', self.calculate_total(), '\n')
 
     def show_item_catalog(self):
         t = PrettyTable(['Item ID', 'Item Name', 'Price', 'In Stock'])
@@ -51,7 +52,7 @@ class Cart():
             price = curr_item.get_price()
             total_cost += quantity * price
             
-        return total_cost
+        return round(total_cost, 2)
 
     def add_item_to_cart(self, item_id: int, quantity: int):
         if item_id not in self.item_catalog.keys():
@@ -126,7 +127,7 @@ class Cart():
     
     def checkout_items(self):
         transaction = {}
-        transaction['transaction_id'] = 1
+        transaction['transaction_id'] = 1 + int(find_max_transaction_id())
         transaction['user_id'] = self.user_id
         dt = datetime.now()
         transaction['date'] = datetime.isoformat(dt)
@@ -134,8 +135,9 @@ class Cart():
         transaction['total_cost'] = self.calculate_total()
 
         add_transaction(transaction)
+        delete_user_cart_by_user_id(self.user_id)
 
-        self.clear_cart()
+        self.user_cart = []
 
         return True
 

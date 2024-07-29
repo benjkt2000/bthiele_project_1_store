@@ -13,7 +13,7 @@ User Menu:
 
     View Cart 
         Show Current Cart
-        Update/Remove Item   (ACCOUNT FOR EMPTY CART)
+        Update/Remove Item   
         Remove All Items
         Checkout
         Return To User Menu

@@ -72,6 +72,7 @@ def execute_user_menu(account: Account):
         elif command == '2':
             execute_view_cart_menu(current_account)
         elif command == '3':
+            current_account.list_of_transactions =  current_account.get_account_transactions(current_account.user_id)
             current_account.view_all_transactions()
         elif command == '4':
             execute_modify_account_info_menu(current_account)
@@ -100,20 +101,33 @@ def execute_browse_items_menu(account: Account):
             item_already_exists = True
             while item_already_exists == True:
                 item_id = input('Please enter an item id: ')
-                if current_account.shopping_cart.check_if_item_is_in_cart(int(item_id)):
-                    print('Item already exists in cart. Please use VIEW CART menu to update.')
+                if item_id.isdigit():
+                    if current_account.shopping_cart.check_if_item_is_in_cart(int(item_id)):
+                        print('Item already exists in cart. Please use VIEW CART menu to update.\n')
+                    elif check_if_item_exists(int(item_id), get_list_of_items()) == False:
+                        print('Item does not exist in database.\n') 
+                    else:
+                        item_already_exists = False
                 else:
-                    item_already_exists = False
-            
-            quantity = input('Please enter a quantity: ')
+                    print('Input must be an integer.\n')
+
+            vaild_quantity = False
+            quantity = 0
+            while vaild_quantity == False:
+                quantity = input('Please enter a quantity: ')
+                if quantity.isdigit():
+                    vaild_quantity = True
+                else:
+                    print('Input must be an integer.\n')
 
             success = current_account.shopping_cart.add_item_to_cart(int(item_id), int(quantity))
 
             if(success):
-                print('Item successfuly added to cart.')
+                print('Item successfuly added to cart.\n')
                 current_account.shopping_cart.show_cart()
             else:
-                print('Failed to add item to cart')
+                print('Failed to add item to cart\n')
+            
 
         elif command == '3':
             return None     
@@ -138,31 +152,48 @@ def execute_view_cart_menu(account: Account):
             current_account.shopping_cart.show_cart() 
        
         elif command == '2':
-            item_id = 0
-            item_already_exists = False
-            while item_already_exists == False:
-                item_id = input('Please enter an item id: ')
-                if current_account.shopping_cart.check_if_item_is_in_cart(int(item_id)) == False:
-                    print('Item does not exist in cart. Please use BROWSE ITEMS menu to update.')
-                else:
-                    item_already_exists = True
-            
-            quantity = input('Please enter a quantity: ')
-
-            success = current_account.shopping_cart.update_item_quantity(int(item_id), int(quantity))
-
-            if(success):
-                print('Successfuly updated item in cart.')
-                current_account.shopping_cart.show_cart()
+            if not current_account.shopping_cart.user_cart:
+                print('Cart is empty.\n')
             else:
-                print('Failed to add item to cart')
+                item_id = 0
+                item_already_exists = False
+                while item_already_exists == False:
+                    
+                    item_id = input('Please enter an item id: ')
+                    if item_id.isdigit():
+                        if current_account.shopping_cart.check_if_item_is_in_cart(int(item_id)) == False:
+                            print('Item does not exist in cart. Please use BROWSE ITEMS menu to update.\n')
+                        else:
+                            item_already_exists = True
+                    else:
+                        print('Input must be an integer.\n')
+                
+                vaild_quantity = False
+                quantity = 0
+                while vaild_quantity == False:
+                    quantity = input('Please enter a quantity: ')
+                    if quantity.isdigit():
+                        vaild_quantity = True
+                    else:
+                        print('Input must be an integer.\n')
+
+                success = current_account.shopping_cart.update_item_quantity(int(item_id), int(quantity))
+
+                if(success):
+                    print('Successfuly updated item in cart.\n')
+                    current_account.shopping_cart.show_cart()
+                else:
+                    print('Failed to update item in cart\n')
         
         elif command == '3':
             current_account.shopping_cart.clear_cart()
-            print('All items have been removed from cart!')
+            print('All items have been removed from cart!\n')
         elif command == '4':
-            current_account.shopping_cart.checkout_items()
-            print('Items have been purchased!')
+            if not current_account.shopping_cart.user_cart:
+                print('Cart is empty.\n')
+            else:    
+                current_account.shopping_cart.checkout_items()
+                print('Items have been purchased!\n')
         elif command == '5':
             return None     
         else:
@@ -251,7 +282,7 @@ def execute_admin_menu(account: Account):
         elif command == '3':
             display_all_transactions(get_list_of_items())
         elif command == '4':
-            pass
+            execute_modify_account_info_menu(current_account)
         elif command == '5':
             return None
         else:
@@ -266,12 +297,14 @@ def execute_admin_modify_account_info_menu():
     curr_user_id = 0
     while valid_id == False:
         curr_user_id = input('Please enter a user id to edit: ')
-
-        if check_if_user_exists_by_id(int(curr_user_id), list_of_users):
-            print('Valid User.\n')
-            valid_id = True
+        if curr_user_id.isdigit():
+            if check_if_user_exists_by_id(int(curr_user_id), list_of_users):
+                print('Valid User.\n')
+                valid_id = True
+            else:
+                print('User does not exist. Please Try again\n')
         else:
-            print('User does not exist. Please Try again')
+            print('Input must be an integer.\n')
 
     current_account = list_of_users[int(curr_user_id)]
 
@@ -336,7 +369,7 @@ def execute_admin_modify_account_info_menu():
                     current_account.change_admin_status(True)
                 else:
                     current_account.change_admin_status(False)
-                print('Admin status changed.')
+                print('Admin status changed.\n')
             else: 
                 print('Invalid Input\n')
 
@@ -370,11 +403,13 @@ def execute_modify_items_menu():
             item_already_exists = True
             while item_already_exists == True:
                 item_id = input('Please enter an item id: ')
-                if check_if_item_exists(int(item_id), list_of_items):
-                    print('Item already exists in database.')
+                if item_id.isdigit():
+                    if check_if_item_exists(int(item_id), list_of_items):
+                        print('Item already exists in database.')
+                    else:
+                        item_already_exists = False
                 else:
-                    item_already_exists = False
-            
+                    print('Input must be an integer.')
             name = input('Please enter an item name: ')
             
             price = 0.00
@@ -386,20 +421,66 @@ def execute_modify_items_menu():
                 else:
                     print('Price must be in decimal format!\n')
   
-            quantity = input('Please enter a quantity: ')
+            vaild_quantity = False
+            quantity = 0
+            while vaild_quantity == False:
+                quantity = input('Please enter a quantity: ')
+                if quantity.isdigit():
+                    vaild_quantity = True
+                else:
+                    print('Input must be an integer.\n')
 
-            success = add_item(int(item_id), name,float("{:.2f}".format(float(price))), int(quantity), list_of_items)
+            success = add_item(int(item_id), name,round(float(price), 2), int(quantity), list_of_items)
 
             if(success):
                 print('Item successfuly added to database.\n')
             else:
-                print('Failed to add item to cart\n')
+                print('Failed to add item to database.\n')
 
         elif command == '3':
-            pass
+            item_id = 0
+            item_exists = False
+            while item_exists == False:
+                item_id = input('Please enter an item id: ')
+                if item_id.isdigit():
+                    if check_if_item_exists(int(item_id), list_of_items):
+                     item_exists = True
+                    else:
+                        print('Item does not exist in database.\n')
+                else:
+                    print('Input must be an integer.\n')
+
+            remove_item(int(item_id), list_of_items)
+            print('Item has been removed from inventory.\n')
 
         elif command == '4':
-            pass
+            item_id = 0
+            item_exists = False
+            while item_exists == False:
+                item_id = input('Please enter an item id: ')
+                if item_id.isdigit():
+                    if check_if_item_exists(int(item_id), list_of_items):
+                     item_exists = True
+                    else:
+                        print('Item does not exist in database.\n')
+                else:
+                    print('Input must be an integer.\n')
+            
+            vaild_quantity = False
+            quantity = 0
+            while vaild_quantity == False:
+                quantity = input('Please enter a quantity: ')
+                if quantity.isdigit():
+                    vaild_quantity = True
+                else:
+                    print('Input must be an integer.\n')
+
+            success = update_item_quantity(int(item_id), int(quantity), list_of_items)
+
+            if success == True:
+                print('Item updated successfuly.\n')
+            else:
+                print('Item could not be updated. Quantity must be greater than current inventory.\n')
 
         elif command == '5':
             return None
