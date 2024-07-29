@@ -1,0 +1,26 @@
+
+2024-07-29 12:52:06,975 Created Database groceryStore.
+2024-07-29 12:52:38,034 New User 'ssmith' created. 
+2024-07-29 12:52:59,355 User 'ssmith' displayed all items. 
+2024-07-29 12:53:15,955 User 'ssmith' added an item. 
+2024-07-29 12:53:32,487 User 'ssmith' displayed all items in cart. 
+2024-07-29 12:53:46,278 User 'ssmith' updated an item in his/her cart. 
+2024-07-29 12:54:20,385 User 'ssmith' displayed all items in cart. 
+2024-07-29 12:54:51,789 User 'ssmith' logged in. 
+2024-07-29 12:54:56,785 User 'ssmith' displayed all items in cart. 
+2024-07-29 12:55:04,225 User 'ssmith' performed cart checkout. 
+2024-07-29 12:55:12,962 User 'ssmith' displayed all his/her transactions.
+2024-07-29 12:55:42,880 User 'ssmith' updated his/her password. 
+2024-07-29 12:56:07,176 User 'admin' logged in. 
+2024-07-29 12:56:30,328 User 'admin' changed 'ssmith's password.
+2024-07-29 12:56:31,825 User 'admin' retrieved 'ssmith's information.
+2024-07-29 12:56:56,146 User 'admin' changed 'ssmith's admin status.
+2024-07-29 12:56:59,934 User 'admin' retrieved 'ssmith's information.
+2024-07-29 12:57:13,481 User 'admin' retrived all items.
+2024-07-29 12:57:21,241 User 'admin' retrived all items.
+2024-07-29 12:57:37,642 User 'admin' added 'Turkey' to the database.
+2024-07-29 12:57:39,636 User 'admin' retrived all items.
+2024-07-29 12:58:00,307 User 'admin' updated item_id: '5' in the database.
+2024-07-29 12:58:01,909 User 'admin' retrived all items.
+2024-07-29 12:58:11,708 User 'admin' removed item_id: '5' from the database.
+2024-07-29 12:58:13,165 User 'admin' retrived all items.

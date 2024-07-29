@@ -5,7 +5,7 @@ import logging
 
 def main():
     # Initate Logging
-    logging.basicConfig(filename="./StoreApp/groceryStore.log",format='%(asctime)s %(message)s',filemode='w')
+    logging.basicConfig(filename="./StoreApp/groceryStore.log",format='%(asctime)s %(message)s')
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
 

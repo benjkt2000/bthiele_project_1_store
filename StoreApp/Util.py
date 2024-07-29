@@ -2,6 +2,7 @@ from DAO import *
 from Item import *
 from Account import *
 from prettytable import PrettyTable
+import os
 
 # General Inventory Functions
 def get_list_of_items():
@@ -160,9 +161,6 @@ def add_account(username: str, password: str, first_name: str, last_name: str):
     max_user_id = find_largest_user_id(retrieve_all_users())
     add_account_to_database(max_user_id + 1, username, password, first_name, last_name, False)
     return True
-
-        
-
 
 
 
