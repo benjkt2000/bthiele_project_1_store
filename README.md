@@ -3,11 +3,11 @@ The purpose of this project was to create a python application that models a gro
 
 To run application use 'Main.py' in the StoreApp folder.
 
-Tech Stack
+Tech Stack:
 <ul>
-    - MongoDB
-    - Python
-    - pymongo
+    <li>MongoDB</li>
+    <li>Python</li>
+    <li>pymongo</li>
 </ul>
 
 Features:
